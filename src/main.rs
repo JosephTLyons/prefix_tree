@@ -39,12 +39,6 @@ impl Level {
     // Returns a position and a boolean.  If the boolean is true, it already exists. If the boolean
     // is false, the position returned is where the item should be inserted.
     fn binary_search(&mut self, plain_letter: char) -> (usize, bool) {
-        let letter: Letter = Letter {
-            letter: plain_letter,
-            word_marker: false,
-            level_below: None,
-            level_above: None};
-
         let mut lower: usize = 0;
         let mut upper: usize = self.letter_vector.len() - 1;
         let mut middle: usize = 0;
@@ -52,11 +46,11 @@ impl Level {
         while lower <= upper {
             middle = lower + (upper - lower) / 2;
 
-            if self.letter_vector[middle].letter == letter.letter {
+            if self.letter_vector[middle].letter == plain_letter {
                 return (middle, true);
             }
 
-            else if self.letter_vector[middle].letter < letter.letter {
+            else if self.letter_vector[middle].letter < plain_letter {
                 lower = middle + 1;
             }
 
