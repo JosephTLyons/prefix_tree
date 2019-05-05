@@ -10,65 +10,62 @@ struct Level {
 }
 
 impl Level {
-    fn insert_word(&self, word: String) {
+    fn insert_word(&mut self, word: String) {
         let letter: Letter;
 
         for x in word.chars() {
-            let position: i32 = self.find_letter_in_level(x);
+            let position: usize = self.binary_insert(x);
 
-            if position == -1 {
-                // Add letter
-                // Travel down path of new letter
-            }
-
-            // else if position > 0 {
-            //     // Travel down path at position
-            // }
+            // Travel down path of new letter via position
         }
     }
 
-    fn find_letter_in_level(&self, plain_letter: char) -> i32 {
-        for x in 0..self.letter_vector.len() {
-            if self.letter_vector[x].letter == plain_letter {
-                return x as i32
-            }
+    fn binary_insert(&mut self, plain_letter: char) -> usize {
+        let letter: Letter = Letter {
+            letter: plain_letter,
+            word_marker: false,
+            level_below: None,
+            level_above: None};
+
+        let (position, exists): (usize, bool) = self.binary_search(plain_letter);
+
+        if ! exists {
+            self.letter_vector.insert(position, letter);
         }
 
-        -1
+        position
     }
 
-    fn insert_letter_alphabetically(&mut self, plain_letter: char) {
+    // Returns a position and a bool.  If the boolean is true, it already exists. If the boolean is
+    // false, the position returned is where the item should be inserted.
+    fn binary_search(&mut self, plain_letter: char) -> (usize, bool) {
+        let letter: Letter = Letter {
+            letter: plain_letter,
+            word_marker: false,
+            level_below: None,
+            level_above: None};
 
-        match v.binary_search(&new_elem) {
-            Ok(pos) => {} // element already in vector @ `pos`
-            Err(pos) => v.insert(pos, new_elem),}
-}
-        if self.letter_vector.is_empty() {
-            let letter: Letter = Letter {
-                letter: plain_letter,
-                word_marker: false,
-                level_below: None,
-                level_above: None};
+        let mut lower: usize = 0;
+        let mut upper: usize = self.letter_vector.len() - 1;
+        let mut middle: usize = 0;
 
-            self.letter_vector.push(letter);
+        while lower <= upper {
+            middle = lower + (upper - lower) / 2;
 
-            return;
-        }
+            if self.letter_vector[middle].letter == letter.letter {
+                return (middle, true);
+            }
 
-        for x in 0..self.letter_vector.len() {
-            if plain_letter <= self.letter_vector[x + 1].letter
-                && plain_letter >= self.letter_vector[x].letter {
-                let letter: Letter = Letter {
-                    letter: plain_letter,
-                    word_marker: false,
-                    level_below: None,
-                    level_above: None};
+            else if self.letter_vector[middle].letter < letter.letter {
+                lower = middle + 1;
+            }
 
-                self.letter_vector.insert(x + 1, letter);
-
-                return;
+            else {
+                upper = middle - 1;
             }
         }
+
+        (middle, false)
     }
 
     // fn print(&self) {
@@ -77,7 +74,7 @@ impl Level {
 }
 
 fn main() {
-    let main_level: Level = Level {
+    let mut main_level: Level = Level {
         letter_vector: Vec::new(),
     };
 
@@ -94,12 +91,12 @@ mod tests {
             letter_vector: Vec::new(),
         };
 
-        main_level.insert_letter_alphabetically('z');
-        main_level.insert_letter_alphabetically('a');
-        main_level.insert_letter_alphabetically('j');
+        // main_level.binary_insert('z');
+        main_level.binary_insert('a');
+        // main_level.binary_insert('j');
 
-        assert_eq!(true,    main_level.letter_vector[0].letter == 'a'
-                         && main_level.letter_vector[1].letter == 'j'
-                         && main_level.letter_vector[1].letter == 'z');
+        assert_eq!(true,    main_level.letter_vector[0].letter == 'a');
+                         // && main_level.letter_vector[1].letter == 'j'
+                         // && main_level.letter_vector[1].letter == 'z');
     }
 }
