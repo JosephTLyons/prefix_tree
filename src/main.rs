@@ -20,6 +20,8 @@ impl Level {
         }
     }
 
+    // Either inserts the item if it doesn't exist and returns this location or simple returns the
+    // location if it does exist.
     fn binary_insert(&mut self, plain_letter: char) -> usize {
         let letter: Letter = Letter {
             letter: plain_letter,
