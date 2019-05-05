@@ -36,8 +36,8 @@ impl Level {
         position
     }
 
-    // Returns a position and a bool.  If the boolean is true, it already exists. If the boolean is
-    // false, the position returned is where the item should be inserted.
+    // Returns a position and a boolean.  If the boolean is true, it already exists. If the boolean
+    // is false, the position returned is where the item should be inserted.
     fn binary_search(&mut self, plain_letter: char) -> (usize, bool) {
         let letter: Letter = Letter {
             letter: plain_letter,
