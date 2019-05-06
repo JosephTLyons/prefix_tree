@@ -1,5 +1,5 @@
-use std::rc::Rc;
 use std::cmp::Ordering;
+use std::rc::Rc;
 
 struct Letter {
     letter: char,
@@ -40,14 +40,12 @@ impl Level {
             letter: plain_letter,
             word_marker: false,
             level_below: None,
-            level_above: None
+            level_above: None,
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
         match self.letter_vector.binary_search(&letter) {
-            Ok(pos) => {
-                pos
-            }
+            Ok(pos) => pos,
             Err(pos) => {
                 self.letter_vector.insert(pos, letter);
                 pos
@@ -58,13 +56,14 @@ impl Level {
 
 struct Dictionary {
     head: Option<Rc<Level>>,
-    temp: Option<Rc<Level>>
-    // tail: Option<Box<Level>>
+    temp: Option<Rc<Level>>,
 }
 
 impl Dictionary {
     fn create(&mut self) {
-        self.head = Some(Rc::new(Level{letter_vector: Vec::new()}));
+        self.head = Some(Rc::new(Level {
+            letter_vector: Vec::new(),
+        }));
     }
 
     fn insert_word(&mut self, word: String) {
@@ -72,7 +71,6 @@ impl Dictionary {
         let mut position: usize;
 
         for x in word.chars() {
-
             match &self.temp {
                 Some(y) => {
                     // position = y.binary_insert(x);
@@ -101,7 +99,7 @@ fn main() {
 
     dict.create();
 
-    dict.insert_word ("Dog".to_string());
+    dict.insert_word("Dog".to_string());
 }
 
 #[cfg(test)]
@@ -118,10 +116,12 @@ mod tests {
         main_level.binary_insert('x');
         main_level.binary_insert('u');
 
-
-        assert_eq!(true,    main_level.letter_vector[0].letter == 'i'
-                         && main_level.letter_vector[1].letter == 'u'
-                         && main_level.letter_vector[2].letter == 'x');
+        assert_eq!(
+            true,
+            main_level.letter_vector[0].letter == 'i'
+                && main_level.letter_vector[1].letter == 'u'
+                && main_level.letter_vector[2].letter == 'x'
+        );
     }
 
     #[test]
@@ -159,7 +159,8 @@ mod tests {
         let mut in_order: bool = true;
 
         for x in 1..main_level.letter_vector.len() {
-            in_order = in_order && (main_level.letter_vector[x - 1].letter < main_level.letter_vector[x].letter);
+            in_order = in_order
+                && (main_level.letter_vector[x - 1].letter < main_level.letter_vector[x].letter);
         }
 
         assert_eq!(true, in_order);
