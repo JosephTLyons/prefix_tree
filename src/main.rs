@@ -1,18 +1,9 @@
 use std::cell::RefCell;
 use std::cmp::Ordering;
 use std::rc::Rc;
+use std::mem;
 
-fn main() {
-    let mut dict: Dictionary = Dictionary {
-        head: None,
-        temp: None,
-    };
-
-    dict.create();
-
-    dict.insert_word("Dog".to_string());
-}
-
+// Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
 struct Letter {
     letter: char,
     word_marker: bool,
@@ -40,6 +31,7 @@ impl Ord for Letter {
     }
 }
 
+// A vector of Letters
 pub struct Level {
     letter_vector: Vec<Letter>,
 }
@@ -86,7 +78,7 @@ impl Dictionary {
         self.temp = self.head.clone();
 
         for x in word.chars() {
-            match &mut self.temp {
+            match mem::replace(&mut self.temp, None) {
                 Some(y) => {
                     // Insert Letter and get its position
                     position = y.borrow_mut().binary_insert(x);
@@ -97,7 +89,7 @@ impl Dictionary {
                     })));
 
                     // Move down to this new path
-                    self.temp = y.borrow_mut().letter_vector[position].level_below;
+                    self.temp = y.borrow_mut().letter_vector[position].level_below.clone();
                 }
 
                 None => println!("Temp isn't pointing to a valid level"),
@@ -105,7 +97,34 @@ impl Dictionary {
         }
     }
 
-    pub fn print(&self) {}
+    pub fn print(&mut self) {
+        self.temp = self.head.clone();
+
+        match &mut self.temp {
+            Some(y) => {
+                for x in &mut y.borrow_mut().letter_vector {
+                    println!("{}", x.letter);
+                }
+            },
+
+            None => println!("Dog"),
+        }
+    }
+}
+
+fn main() {
+    let mut dict: Dictionary = Dictionary {
+        head: None,
+        temp: None,
+    };
+
+    dict.create();
+    dict.insert_word("cat".to_string());
+    dict.insert_word("dog".to_string());
+    dict.insert_word("ant".to_string());
+    dict.insert_word("mouse".to_string());
+    dict.insert_word("chicken".to_string());
+    dict.print();
 }
 
 #[cfg(test)]
