@@ -1,13 +1,15 @@
 use std::cell::RefCell;
 use std::cmp::Ordering;
-use std::rc::Rc;
 use std::mem;
+use std::rc::Rc;
 
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
 struct Letter {
     letter: char,
     word_marker: bool,
     level_below: Option<Rc<RefCell<Level>>>,
+
+    // May have to use if I can't get the print to work with recursion
     level_above: Option<Rc<RefCell<Level>>>,
 }
 
@@ -48,13 +50,25 @@ impl Level {
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
-        match self.letter_vector.binary_search(&letter) {
+        match self.binary_search(plain_letter) {
             Ok(pos) => pos,
             Err(pos) => {
                 self.letter_vector.insert(pos, letter);
                 pos
             }
         }
+    }
+
+    fn binary_search(&mut self, plain_letter: char) -> Result<usize, usize> {
+        let letter: Letter = Letter {
+            letter: plain_letter,
+            word_marker: false,
+            level_below: None,
+            level_above: None,
+        };
+
+        // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
+        self.letter_vector.binary_search(&letter)
     }
 }
 
@@ -77,19 +91,27 @@ impl Dictionary {
         let mut position: usize;
         self.temp = self.head.clone();
 
-        for x in word.chars() {
+        for (index, item) in word.chars().enumerate() {
             match mem::replace(&mut self.temp, None) {
                 Some(y) => {
                     // Insert Letter and get its position
-                    position = y.borrow_mut().binary_insert(x);
+                    position = y.borrow_mut().binary_insert(item);
 
-                    // Insert a new level at the pointer of this new character
-                    y.borrow_mut().letter_vector[position].level_below = Some(Rc::new(RefCell::new(Level {
-                        letter_vector: Vec::new(),
-                    })));
+                    // Mark the end of the word
+                    if index == word.len() - 1 {
+                        y.borrow_mut().letter_vector[position].word_marker = true;
+                    }
+                    // Create a new Level below and travel down to it
+                    else {
+                        // Insert a new level at the pointer of this new character
+                        y.borrow_mut().letter_vector[position].level_below =
+                            Some(Rc::new(RefCell::new(Level {
+                                letter_vector: Vec::new(),
+                            })));
 
-                    // Move down to this new path
-                    self.temp = y.borrow_mut().letter_vector[position].level_below.clone();
+                        // Move down to this new path
+                        self.temp = y.borrow_mut().letter_vector[position].level_below.clone();
+                    }
                 }
 
                 None => println!("Temp isn't pointing to a valid level"),
@@ -97,7 +119,13 @@ impl Dictionary {
         }
     }
 
-    pub fn print(&mut self) {
+    pub fn print_all_words_with_letter(&mut self, letter: char) {
+        self.temp = self.head.clone();
+        // use binary search to find letter
+    }
+
+
+    pub fn print_all_words(&mut self) {
         self.temp = self.head.clone();
 
         match &mut self.temp {
@@ -105,7 +133,7 @@ impl Dictionary {
                 for x in &mut y.borrow_mut().letter_vector {
                     println!("{}", x.letter);
                 }
-            },
+            }
 
             None => println!("Dog"),
         }
@@ -124,7 +152,8 @@ fn main() {
     dict.insert_word("ant".to_string());
     dict.insert_word("mouse".to_string());
     dict.insert_word("chicken".to_string());
-    dict.print();
+    dict.insert_word("moose".to_string());
+    dict.print_all_words();
 }
 
 #[cfg(test)]
