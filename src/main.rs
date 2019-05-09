@@ -6,7 +6,7 @@ use std::rc::Rc;
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
 struct Letter {
     letter: char,
-    word_marker: bool,
+    end_of_word: bool,
     level_below: Option<Rc<RefCell<Level>>>,
 
     // May have to use if I can't get the print to work with recursion
@@ -44,7 +44,7 @@ impl Level {
     fn binary_insert(&mut self, plain_letter: char) -> usize {
         let letter: Letter = Letter {
             letter: plain_letter,
-            word_marker: false,
+            end_of_word: false,
             level_below: None,
             level_above: None,
         };
@@ -62,7 +62,7 @@ impl Level {
     fn binary_search(&mut self, plain_letter: char) -> Result<usize, usize> {
         let letter: Letter = Letter {
             letter: plain_letter,
-            word_marker: false,
+            end_of_word: false,
             level_below: None,
             level_above: None,
         };
@@ -72,19 +72,22 @@ impl Level {
     }
 }
 
+#[derive(Default)]
 pub struct Dictionary {
     pub head: Option<Rc<RefCell<Level>>>,
     pub temp: Option<Rc<RefCell<Level>>>,
 }
 
 impl Dictionary {
-    pub fn create(&mut self) {
-        let first_level: Level = Level {
+    pub fn new() -> Self {
+        let temp = Some(Rc::new(RefCell::new(Level {
             letter_vector: Vec::new(),
-        };
+        })));
 
-        self.head = Some(Rc::new(RefCell::new(first_level)));
-        self.temp = self.head.clone();
+        Dictionary {
+            head: temp.clone(),
+            temp: temp.clone(),
+        }
     }
 
     pub fn insert_word(&mut self, word: String) {
@@ -99,7 +102,7 @@ impl Dictionary {
 
                     // Mark the end of the word
                     if index == word.len() - 1 {
-                        y.borrow_mut().letter_vector[position].word_marker = true;
+                        y.borrow_mut().letter_vector[position].end_of_word = true;
                     }
                     // Create a new Level below and travel down to it
                     else {
@@ -119,41 +122,44 @@ impl Dictionary {
         }
     }
 
-    pub fn print_all_words_with_letter(&mut self, letter: char) {
-        self.temp = self.head.clone();
-        // use binary search to find letter
+    pub fn print_words(&mut self) {
+        self.print_words_recursive_helper(&mut self.head.clone(), &mut String::new());
     }
 
-
-    pub fn print_all_words(&mut self) {
-        self.temp = self.head.clone();
-
-        match &mut self.temp {
+    fn print_words_recursive_helper(&mut self,
+                                     mut temp: &mut Option<Rc<RefCell<Level>>>,
+                                     mut word: &mut String,) {
+        match &mut temp {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
-                    println!("{}", x.letter);
+                    word.push(x.letter);
+
+                    if x.end_of_word {
+                        println!("{}", word);
+                        word.clear();
+                    }
+
+                    self.print_words_recursive_helper(&mut x.level_below, &mut word);
                 }
             }
 
-            None => println!("Dog"),
+            None => return,
         }
     }
 }
 
 fn main() {
-    let mut dict: Dictionary = Dictionary {
-        head: None,
-        temp: None,
-    };
+    let mut dict: Dictionary = Dictionary::new();
 
-    dict.create();
-    dict.insert_word("cat".to_string());
-    dict.insert_word("dog".to_string());
-    dict.insert_word("ant".to_string());
-    dict.insert_word("mouse".to_string());
-    dict.insert_word("chicken".to_string());
-    dict.insert_word("moose".to_string());
-    dict.print_all_words();
+    dict.insert_word(String::from("animal"));
+    dict.insert_word(String::from("done"));
+    dict.insert_word(String::from("bike"));
+    dict.insert_word(String::from("man"));
+    dict.insert_word(String::from("zebra"));
+    dict.insert_word(String::from("cloak"));
+    // dict.insert_word(String::from("carrot"));
+
+    dict.print_words();
 }
 
 #[cfg(test)]
