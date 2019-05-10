@@ -280,6 +280,8 @@ mod tests {
 }
 
 // TODO
+// Implement Display trait
+// Pass in Letter from binary insert to binary search
 // Clean up code heavily
 // Run format
 // Remove print print debug statements
