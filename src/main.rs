@@ -271,6 +271,7 @@ mod tests {
 
 // TODO
 // Clean up code heavily
+// Run format
 // Remove print print debug statements
 // Rename project with a more descriptive name
 // Upload to GitHub, add README.md
