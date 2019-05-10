@@ -1,6 +1,5 @@
 use std::cell::RefCell;
 use std::cmp::Ordering;
-use std::mem;
 use std::rc::Rc;
 
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
@@ -8,9 +7,6 @@ struct Letter {
     letter: char,
     end_of_word: bool,
     level_below: Option<Rc<RefCell<Level>>>,
-
-    // May have to use if I can't get the print to work with recursion
-    level_above: Option<Rc<RefCell<Level>>>,
 }
 
 impl PartialOrd for Letter {
@@ -46,7 +42,6 @@ impl Level {
             letter: plain_letter,
             end_of_word: false,
             level_below: None,
-            level_above: None,
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
@@ -64,7 +59,6 @@ impl Level {
             letter: plain_letter,
             end_of_word: false,
             level_below: None,
-            level_above: None,
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
@@ -75,7 +69,7 @@ impl Level {
 #[derive(Default)]
 pub struct Dictionary {
     pub head: Option<Rc<RefCell<Level>>>,
-    pub temp: Option<Rc<RefCell<Level>>>,
+    pub iter: Option<Rc<RefCell<Level>>>,
 }
 
 impl Dictionary {
@@ -86,60 +80,73 @@ impl Dictionary {
 
         Dictionary {
             head: temp.clone(),
-            temp: temp.clone(),
+            iter: temp.clone(),
         }
     }
 
     pub fn insert_word(&mut self, word: String) {
         let mut position: usize;
-        self.temp = self.head.clone();
+        self.iter = self.head.clone();
 
         for (index, item) in word.chars().enumerate() {
-            match mem::replace(&mut self.temp, None) {
+            match &self.iter.clone() {
                 Some(y) => {
                     // Insert Letter and get its position
                     position = y.borrow_mut().binary_insert(item);
 
-                    // Mark the end of the word
+                    println!("Level {} vector len: {}", index + 1, y.borrow().letter_vector.len());
+
+                    let mut should_make_new_level: bool = false;
+
+                    // Mark the end of the word, then we are finished, no more levels are needed
                     if index == word.len() - 1 {
                         y.borrow_mut().letter_vector[position].end_of_word = true;
                     }
-                    // Create a new Level below and travel down to it
-                    else {
-                        // Insert a new level at the pointer of this new character
-                        y.borrow_mut().letter_vector[position].level_below =
-                            Some(Rc::new(RefCell::new(Level {
-                                letter_vector: Vec::new(),
-                            })));
 
-                        // Move down to this new path
-                        self.temp = y.borrow_mut().letter_vector[position].level_below.clone();
+                    else {
+                        match y.borrow().letter_vector[position].level_below {
+                            Some(_) => println!("There exists a level below."),
+
+                            // Create a new Level below
+                            None => should_make_new_level = true,
+                        }
+
+                        if should_make_new_level {
+                            y.borrow_mut().letter_vector[position].level_below =
+                                Some(Rc::new(RefCell::new(Level {
+                                    letter_vector: Vec::new(),
+                                })));
+                        }
+
+                        // Move down to a level
+                        self.iter = y.borrow().letter_vector[position].level_below.clone();
                     }
                 }
 
-                None => println!("Temp isn't pointing to a valid level"),
+                None => println!("Iter isn't pointing to a valid level."),
             }
         }
     }
 
     pub fn print_words(&mut self) {
-        self.print_words_recursive_helper(&mut self.head.clone(), &mut String::new());
+        self.print_words_recursive_helper(&mut self.head.clone(), String::new());
     }
 
     fn print_words_recursive_helper(&mut self,
-                                     mut temp: &mut Option<Rc<RefCell<Level>>>,
-                                     mut word: &mut String,) {
-        match &mut temp {
+                                     mut iter: &mut Option<Rc<RefCell<Level>>>,
+                                     mut word: String,) {
+        match &mut iter {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
                     word.push(x.letter);
 
                     if x.end_of_word {
                         println!("{}", word);
-                        word.clear();
                     }
 
-                    self.print_words_recursive_helper(&mut x.level_below, &mut word);
+                    self.print_words_recursive_helper(&mut x.level_below, word.clone());
+
+                    word.pop();
                 }
             }
 
@@ -151,13 +158,24 @@ impl Dictionary {
 fn main() {
     let mut dict: Dictionary = Dictionary::new();
 
+    dict.insert_word(String::from("a"));
+    dict.insert_word(String::from("ab"));
+    dict.insert_word(String::from("an"));
     dict.insert_word(String::from("animal"));
-    dict.insert_word(String::from("done"));
     dict.insert_word(String::from("bike"));
+    dict.insert_word(String::from("done"));
+    dict.insert_word(String::from("elevator"));
+    dict.insert_word(String::from("finale"));
+    dict.insert_word(String::from("fortitude"));
+    dict.insert_word(String::from("honest"));
+    dict.insert_word(String::from("jump"));
+    dict.insert_word(String::from("lift"));
     dict.insert_word(String::from("man"));
+    dict.insert_word(String::from("pallace"));
+    dict.insert_word(String::from("restored"));
     dict.insert_word(String::from("zebra"));
     dict.insert_word(String::from("cloak"));
-    // dict.insert_word(String::from("carrot"));
+    dict.insert_word(String::from("carrot"));
 
     dict.print_words();
 }
@@ -225,10 +243,33 @@ mod tests {
 
         assert_eq!(true, in_order);
     }
+
+    #[test]
+    fn insert_same_test() {
+        let mut main_level: Level = Level {
+            letter_vector: Vec::new(),
+        };
+
+        main_level.binary_insert('a');
+        main_level.binary_insert('a');
+
+        assert_eq!(true, main_level.letter_vector.len() == 1);
+    }
+
+    #[test]
+    fn insert_differet_test() {
+        let mut main_level: Level = Level {
+            letter_vector: Vec::new(),
+        };
+
+        main_level.binary_insert('a');
+        main_level.binary_insert('b');
+
+        assert_eq!(true, main_level.letter_vector.len() == 2);
+    }
 }
 
 // TODO
-// Finish program
+// Clean up code heavily
+// Have code reviewed and clean up all the non-idiomatic things in here
 // Divide code into modules
-// Does each character NEED an upper level link?  If I use recursion, I won't need to travel back
-// to get to the previous levels.
