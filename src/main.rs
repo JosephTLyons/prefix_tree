@@ -60,8 +60,6 @@ impl Level {
             end_of_word: false,
             level_below: None,
         };
-
-        // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
         self.letter_vector.binary_search(&letter)
     }
 }
