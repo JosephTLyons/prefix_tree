@@ -282,6 +282,7 @@ mod tests {
 // TODO
 // Implement Display trait
 // Pass in Letter from binary insert to binary search
+// Actually, should be able to delete binary search custom method and call it right at the match statement in binary insert
 // Clean up code heavily
 // Run format
 // Remove print print debug statements
