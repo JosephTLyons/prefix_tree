@@ -94,7 +94,13 @@ impl Dictionary {
                     // Insert Letter and get its position
                     position = y.borrow_mut().binary_insert(item);
 
-                    println!("Level {} vector len: {}", index + 1, y.borrow().letter_vector.len());
+                    // Debug code
+                    // println! (
+                    //     "Level: {} | Char: {} | Vector len: {}",
+                    //     index + 1,
+                    //     item,
+                    //     y.borrow().letter_vector.len()
+                    // );
 
                     let mut should_make_new_level: bool = false;
 
@@ -105,7 +111,13 @@ impl Dictionary {
 
                     else {
                         match y.borrow().letter_vector[position].level_below {
-                            Some(_) => println!("There exists a level below."),
+                            Some(_) => {
+                                // Debug code
+                                // println! (
+                                //     "There exists a level below (Char: {} | Level: {})",
+                                //     item,
+                                //     index + 1)
+                            }
 
                             // Create a new Level below
                             None => should_make_new_level = true,
