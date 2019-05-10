@@ -74,13 +74,13 @@ pub struct Dictionary {
 
 impl Dictionary {
     pub fn new() -> Self {
-        let temp = Some(Rc::new(RefCell::new(Level {
+        let first_level = Some(Rc::new(RefCell::new(Level {
             letter_vector: Vec::new(),
         })));
 
         Dictionary {
-            head: temp.clone(),
-            iter: temp.clone(),
+            head: first_level.clone(),
+            iter: first_level.clone(),
         }
     }
 
