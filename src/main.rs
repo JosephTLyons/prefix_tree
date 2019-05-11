@@ -73,7 +73,7 @@ impl Dictionary {
         Dictionary {
             head: first_level.clone(),
             iter: first_level.clone(),
-            word_count: 0
+            word_count: 0,
         }
     }
 
@@ -178,7 +178,7 @@ fn main() {
 
             dict.print_words();
             println!("Words in dictionary: {}", dict.get_word_count());
-        },
+        }
 
         Err(e) => println!("File could not be opened: {}", e),
     }
