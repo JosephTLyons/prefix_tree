@@ -93,6 +93,6 @@ This data structure was mainly created to help me learn a bit more about Rust.
 It serves no purpose other really.  In theory, a data structure like this
 *should* use less memory, as it attempts to use previously inserted letters from
 the beginning of other words, but the implementation here may not be good enough
-to not consume the advantages the theoretical model offers.  This implementation
+to not outweigh the advantages the theoretical model offers.  This implementation
 may use **more** memory and have a fairly poor runtime execution; I haven't
 analyzed it enough to entirely know.
