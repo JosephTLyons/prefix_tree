@@ -136,8 +136,8 @@ impl PrefixTree {
     }
 
     fn print_words_recursively(&mut self,
-                              mut iter: &mut Option<Rc<RefCell<Level>>>,
-                              mut word: String,) {
+                                mut iter: &mut Option<Rc<RefCell<Level>>>,
+                                mut word: String,) {
         match &mut iter {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
