@@ -46,10 +46,10 @@ impl Level {
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
         match self.letter_vector.binary_search(&letter) {
-            Ok(pos) => pos,
-            Err(pos) => {
-                self.letter_vector.insert(pos, letter);
-                pos
+            Ok(position) => position,
+            Err(position) => {
+                self.letter_vector.insert(position, letter);
+                position
             }
         }
     }
