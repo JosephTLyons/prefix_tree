@@ -136,12 +136,12 @@ impl Rrds {
     }
 
     pub fn print_words(&mut self) {
-        self.print_words_recursive_helper(&mut self.head.clone(), String::new());
+        self.print_words_recursive(&mut self.head.clone(), String::new());
     }
 
-    fn print_words_recursive_helper(&mut self,
-                                     mut iter: &mut Option<Rc<RefCell<Level>>>,
-                                     mut word: String,) {
+    fn print_words_recursive(&mut self,
+                              mut iter: &mut Option<Rc<RefCell<Level>>>,
+                              mut word: String,) {
         match &mut iter {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
@@ -151,7 +151,7 @@ impl Rrds {
                         println!("{}", word);
                     }
 
-                    self.print_words_recursive_helper(&mut x.level_below, word.clone());
+                    self.print_words_recursive(&mut x.level_below, word.clone());
 
                     word.pop();
                 }
