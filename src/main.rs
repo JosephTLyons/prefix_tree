@@ -66,7 +66,9 @@ struct PrefixTree {
 impl PrefixTree {
     pub fn new() -> Self {
         PrefixTree {
-            head: Some(Rc::new(RefCell::new(Level{ letter_vector: Vec::new(), }))),
+            head: Some(Rc::new(RefCell::new(Level {
+                letter_vector: Vec::new(),
+            }))),
             word_count: 0,
         }
     }
