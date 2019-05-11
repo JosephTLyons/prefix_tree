@@ -56,9 +56,9 @@ impl Level {
 }
 
 #[derive(Default)]
-pub struct Dictionary {
-    pub head: Option<Rc<RefCell<Level>>>,
-    pub iter: Option<Rc<RefCell<Level>>>,
+struct Dictionary {
+    head: Option<Rc<RefCell<Level>>>,
+    iter: Option<Rc<RefCell<Level>>>,
 }
 
 impl Dictionary {
