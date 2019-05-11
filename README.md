@@ -83,7 +83,7 @@ Level 4: l       r
 Level 5:         a
 ```
 
-It should be noted that in the previous example, only `Level ` is shared.  
+It should be noted that in the previous example, only `Level` 1 is shared.  
 Though the diagram shows the letters on the same line for `Level`s 1 through 4,
 `ball` / `bat` and `zebra` each have their own individual `Level`s.
 
