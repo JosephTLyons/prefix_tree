@@ -58,19 +58,19 @@ impl Level {
 }
 
 #[derive(Default)]
-struct Dictionary {
+struct Rrds {
     head: Option<Rc<RefCell<Level>>>,
     iter: Option<Rc<RefCell<Level>>>,
     word_count: u32,
 }
 
-impl Dictionary {
+impl Rrds {
     pub fn new() -> Self {
         let first_level = Some(Rc::new(RefCell::new(Level {
             letter_vector: Vec::new(),
         })));
 
-        Dictionary {
+        Rrds {
             head: first_level.clone(),
             iter: first_level.clone(),
             word_count: 0,
@@ -170,14 +170,14 @@ fn main() {
     match File::open("word_files/words_alpha.txt") {
         Ok(words_file) => {
             let buff = BufReader::new(words_file);
-            let mut dict: Dictionary = Dictionary::new();
+            let mut rrds: Rrds = Rrds::new();
 
             for line in buff.lines() {
-                dict.insert_word(line.unwrap());
+                rrds.insert_word(line.unwrap());
             }
 
-            dict.print_words();
-            println!("Words in dictionary: {}", dict.get_word_count());
+            rrds.print_words();
+            println!("Words in rrds: {}", rrds.get_word_count());
         }
 
         Err(e) => println!("File could not be opened: {}", e),
