@@ -59,6 +59,7 @@ impl Level {
 struct Dictionary {
     head: Option<Rc<RefCell<Level>>>,
     iter: Option<Rc<RefCell<Level>>>,
+    word_count: u32,
 }
 
 impl Dictionary {
@@ -70,10 +71,13 @@ impl Dictionary {
         Dictionary {
             head: first_level.clone(),
             iter: first_level.clone(),
+            word_count: 0
         }
     }
 
     pub fn insert_word(&mut self, word: String) {
+        self.word_count += 1;
+
         let mut position: usize;
         self.iter = self.head.clone();
 
@@ -154,6 +158,10 @@ impl Dictionary {
             None => return,
         }
     }
+
+    pub fn get_word_count(&self) -> u32 {
+        self.word_count
+    }
 }
 
 fn main() {
@@ -178,6 +186,7 @@ fn main() {
     dict.insert_word(String::from("cloak"));
     dict.insert_word(String::from("carrot"));
 
+    println!("Words in dictionary: {}", dict.get_word_count());
     dict.print_words();
 }
 
