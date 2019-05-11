@@ -98,11 +98,3 @@ the beginning of other words, but the implementation here may not be good enough
 to not consume the advantages the theoretical model offers.  This implementation
 may use **more** memory and have a fairly poor runtime execution; I haven't
 analyzed it enough to entirely know.
-
-## TODO
- - Implement Display trait ?
- - Clean up code heavily
- - Run format
- - Remove print debug statements
- - Have code reviewed and clean up all the non-idiomatic things in here
- - Divide code into modules
