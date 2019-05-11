@@ -9,12 +9,12 @@ how it reduces redundancy through an example.
 fn main() {
     let mut rrds: Rrds = Rrds::new();
     rrds.insert_word(String::from("bat"));
-    rrds.print_words();
-    println!("Words in Rrds: {}", rrds.get_word_count());
+    // ...
 }
 ```
 
-After `insert_word()` is executed, the data structure looks like this:
+After `insert_word()` is executed, the internal data structure can be imagined
+like this:
 
 ```txt
 Level 1: b
@@ -37,13 +37,12 @@ fn main() {
     let mut rrds: Rrds = Rrds::new();
     rrds.insert_word(String::from("bat"));
     rrds.insert_word(String::from("ball"));
-    rrds.print_words();
-    println!("Words in Rrds: {}", rrds.get_word_count());
+    // ...
 }
 ```
 
-After the second `insert_word()` is executed, the data structure looks like
-this:
+After the second `insert_word()` is executed, the internal data structure can be
+imagined like this:
 
 ```txt
 Level 1: b
@@ -63,13 +62,12 @@ fn main() {
     rrds.insert_word(String::from("bat"));
     rrds.insert_word(String::from("ball"));
     rrds.insert_word(String::from("zebra"));
-    rrds.print_words();
-    println!("Words in Rrds: {}", rrds.get_word_count());
+    // ...
 }
 ```
 
-After the second `insert_word()` is executed, the data structure looks like
-this:
+After the second `insert_word()` is executed, the internal data structure can be
+imagined like this:
 
 ```txt
 Level 1: b       z
