@@ -9,6 +9,14 @@ struct Letter {
     level_below: Option<Rc<RefCell<Level>>>,
 }
 
+impl Eq for Letter {}
+
+impl Ord for Letter {
+    fn cmp(&self, other: &Letter) -> Ordering {
+        self.letter.cmp(&other.letter)
+    }
+}
+
 impl PartialOrd for Letter {
     fn partial_cmp(&self, other: &Letter) -> Option<Ordering> {
         self.letter.partial_cmp(&other.letter)
@@ -18,14 +26,6 @@ impl PartialOrd for Letter {
 impl PartialEq for Letter {
     fn eq(&self, other: &Letter) -> bool {
         self.letter == other.letter
-    }
-}
-
-impl Eq for Letter {}
-
-impl Ord for Letter {
-    fn cmp(&self, other: &Letter) -> Ordering {
-        self.letter.cmp(&other.letter)
     }
 }
 
