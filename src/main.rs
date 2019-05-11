@@ -77,7 +77,7 @@ impl Rrds {
         }
     }
 
-    pub fn insert_word(&mut self, word: String) {
+    pub fn insert_word(&mut self, word: &str) {
         self.word_count += 1;
 
         let mut position: usize;
@@ -173,7 +173,7 @@ fn main() {
             let mut rrds: Rrds = Rrds::new();
 
             for line in buff.lines() {
-                rrds.insert_word(line.unwrap());
+                rrds.insert_word(&line.unwrap());
             }
 
             rrds.print_words();
