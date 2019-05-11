@@ -60,19 +60,13 @@ impl Level {
 #[derive(Default)]
 struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
-    iter: Option<Rc<RefCell<Level>>>,
     word_count: u32,
 }
 
 impl PrefixTree {
     pub fn new() -> Self {
-        let first_level = Some(Rc::new(RefCell::new(Level {
-            letter_vector: Vec::new(),
-        })));
-
         PrefixTree {
-            head: first_level.clone(),
-            iter: first_level.clone(),
+            head: Some(Rc::new(RefCell::new(Level{ letter_vector: Vec::new(), }))),
             word_count: 0,
         }
     }
@@ -81,10 +75,10 @@ impl PrefixTree {
         self.word_count += 1;
 
         let mut position: usize;
-        self.iter = self.head.clone();
+        let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
 
         for (index, item) in word.chars().enumerate() {
-            match &self.iter.clone() {
+            match &iter.clone() {
                 Some(y) => {
                     // Insert Letter and get its position
                     position = y.borrow_mut().binary_insert(item);
@@ -126,7 +120,7 @@ impl PrefixTree {
                         }
 
                         // Move down to a level
-                        self.iter = y.borrow().letter_vector[position].level_below.clone();
+                        iter = y.borrow().letter_vector[position].level_below.clone();
                     }
                 }
 
