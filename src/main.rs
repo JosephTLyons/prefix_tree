@@ -11,26 +11,6 @@ struct Letter {
     level_below: Option<Rc<RefCell<Level>>>,
 }
 
-impl Eq for Letter {}
-
-impl Ord for Letter {
-    fn cmp(&self, other: &Letter) -> Ordering {
-        self.letter.cmp(&other.letter)
-    }
-}
-
-impl PartialOrd for Letter {
-    fn partial_cmp(&self, other: &Letter) -> Option<Ordering> {
-        self.letter.partial_cmp(&other.letter)
-    }
-}
-
-impl PartialEq for Letter {
-    fn eq(&self, other: &Letter) -> bool {
-        self.letter == other.letter
-    }
-}
-
 // A vector of Letters
 pub struct Level {
     letter_vector: Vec<Letter>,
@@ -47,7 +27,7 @@ impl Level {
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
-        match self.letter_vector.binary_search(&letter) {
+        match self.letter_vector.binary_search_by_key(&plain_letter, |letter| letter.letter) {
             Ok(position) => position,
             Err(position) => {
                 self.letter_vector.insert(position, letter);
