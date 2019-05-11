@@ -7,3 +7,4 @@
 - Divide code into modules
 - Include free-to-use txt files
 - Simply incrementing word count wont work, it assumes all word inserts are unique.  Inserting “dog” and “dog” would count as 2 words.
+- Add method to print all strings with a given prefix (just move down to that level, then fall the recursive print on it)
