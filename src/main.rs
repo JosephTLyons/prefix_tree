@@ -57,6 +57,7 @@ impl PrefixTree {
 
         let mut position: usize;
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
+        let position_of_last_letter: usize = word.char_indices().count() - 1;
 
         for (index, item) in word.chars().enumerate() {
             match &iter.clone() {
@@ -75,7 +76,7 @@ impl PrefixTree {
                     let mut should_make_new_level: bool = false;
 
                     // Mark the end of the word, then we are finished, no more levels are needed
-                    if index == word.len() - 1 {
+                    if index == position_of_last_letter {
                         y.borrow_mut().letter_vector[position].end_of_word = true;
                     }
 
