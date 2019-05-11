@@ -45,22 +45,13 @@ impl Level {
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
-        match self.binary_search(plain_letter) {
+        match self.letter_vector.binary_search(&letter) {
             Ok(pos) => pos,
             Err(pos) => {
                 self.letter_vector.insert(pos, letter);
                 pos
             }
         }
-    }
-
-    fn binary_search(&mut self, plain_letter: char) -> Result<usize, usize> {
-        let letter: Letter = Letter {
-            letter: plain_letter,
-            end_of_word: false,
-            level_below: None,
-        };
-        self.letter_vector.binary_search(&letter)
     }
 }
 
@@ -281,8 +272,6 @@ mod tests {
 
 // TODO
 // Implement Display trait
-// Pass in Letter from binary insert to binary search
-// Actually, should be able to delete binary search custom method and call it right at the match statement in binary insert
 // Clean up code heavily
 // Run format
 // Remove print print debug statements
