@@ -1,9 +1,9 @@
 # RRDS
 
 ## Information
-RRDS = Reduced Redundancy Data Structure.  This data structure holds any amount
-of Rust `String`s in a way that tries to reduce redundancy.  It is best to
-explain how it reduces redundancy through an example.
+RRDS = Reduced Redundancy Data Structure.  This data structure simply any amount
+of text strings in a way that tries to reduce redundancy.  It is best to explain
+how it reduces redundancy through an example.
 
 ```rust
 fn main() {
