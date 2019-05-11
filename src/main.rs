@@ -1,5 +1,7 @@
 use std::cell::RefCell;
 use std::cmp::Ordering;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 use std::rc::Rc;
 
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
@@ -165,29 +167,21 @@ impl Dictionary {
 }
 
 fn main() {
-    let mut dict: Dictionary = Dictionary::new();
+    match File::open("word_files/words_alpha.txt") {
+        Ok(words_file) => {
+            let buff = BufReader::new(words_file);
+            let mut dict: Dictionary = Dictionary::new();
 
-    dict.insert_word(String::from("a"));
-    dict.insert_word(String::from("ab"));
-    dict.insert_word(String::from("an"));
-    dict.insert_word(String::from("animal"));
-    dict.insert_word(String::from("bike"));
-    dict.insert_word(String::from("done"));
-    dict.insert_word(String::from("elevator"));
-    dict.insert_word(String::from("finale"));
-    dict.insert_word(String::from("fortitude"));
-    dict.insert_word(String::from("honest"));
-    dict.insert_word(String::from("jump"));
-    dict.insert_word(String::from("lift"));
-    dict.insert_word(String::from("man"));
-    dict.insert_word(String::from("pallace"));
-    dict.insert_word(String::from("restored"));
-    dict.insert_word(String::from("zebra"));
-    dict.insert_word(String::from("cloak"));
-    dict.insert_word(String::from("carrot"));
+            for line in buff.lines() {
+                dict.insert_word(line.unwrap());
+            }
 
-    println!("Words in dictionary: {}", dict.get_word_count());
-    dict.print_words();
+            dict.print_words();
+            println!("Words in dictionary: {}", dict.get_word_count());
+        },
+
+        Err(e) => println!("File could not be opened: {}", e),
+    }
 }
 
 #[cfg(test)]
