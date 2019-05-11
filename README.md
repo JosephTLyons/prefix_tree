@@ -1,14 +1,15 @@
-# RRDS
+# Prefix Tree
 
 ## Information
-RRDS = Reduced Redundancy Data Structure.  This data structure simply any amount
-of text strings in a way that tries to reduce redundancy.  It is best to explain
-how it reduces redundancy through an example.
+A rusty implementation of a "trie", or a [prefix tree](https://en.wikipedia.org/wiki/Trie).
+This implementation isn't entirely a pure prefix tree, as it uses some
+modifications.  It is best to demonstrate how this implementation stores strings
+through some visual examples:
 
 ```rust
 fn main() {
-    let mut rrds: Rrds = Rrds::new();
-    rrds.insert_word(String::from("bat"));
+    let mut pt: PrefixTree = PrefixTree::new();
+    pt.insert_word("bat");
     // ...
 }
 ```
@@ -17,11 +18,11 @@ After `insert_word()` is executed, the internal data structure can be imagined
 like this:
 
 ```txt
-Level 1: b
+Level 0: b
          |
-Level 2: a
+Level 1: a
          |
-Level 3: t
+Level 2: t
 ```
 
 Each `Level` is a vector containing a `Letter`.  The `Letter` contains a boolean
@@ -34,9 +35,9 @@ In the next example, we insert two similar words:
 
 ```rust
 fn main() {
-    let mut rrds: Rrds = Rrds::new();
-    rrds.insert_word(String::from("bat"));
-    rrds.insert_word(String::from("ball"));
+    let mut pt: PrefixTree = PrefixTree::new();
+    pt.insert_word("bat");
+    pt.insert_word("ball");
     // ...
 }
 ```
@@ -45,23 +46,23 @@ After the second `insert_word()` is executed, the internal data structure can be
 imagined like this:
 
 ```txt
-Level 1: b
+Level 0: b
          |
-Level 2: a
+Level 1: a
          |
-Level 3: l t
+Level 2: l-t
          |
-Level 4: l
+Level 3: l
 ```
 
 In the next example, we insert two similar words and an entirely different word:
 
 ```rust
 fn main() {
-    let mut rrds: Rrds = Rrds::new();
-    rrds.insert_word(String::from("bat"));
-    rrds.insert_word(String::from("ball"));
-    rrds.insert_word(String::from("zebra"));
+    let mut pt: PrefixTree = PrefixTree::new();
+    pt.insert_word("bat");
+    pt.insert_word("ball");
+    pt.insert_word("zebra");
     // ...
 }
 ```
@@ -70,29 +71,26 @@ After the second `insert_word()` is executed, the internal data structure can be
 imagined like this:
 
 ```txt
-Level 1: b       z
-         |       |
-Level 2: a       e
-         |       |
-Level 3: l t     b
-         |       |
-Level 4: l       r
-                 |
-Level 5:         a
+Level 0: b----z
+         |    |
+Level 1: a    e
+         |    |
+Level 2: l-t  b
+         |    |
+Level 3: l    r
+              |
+Level 4:      a
 ```
 
 It should be noted that in the previous example, only `Level` 1 is shared.  
 Though the diagram shows the letters on the same line for `Level`s 1 through 4,
 `ball` / `bat` and `zebra` each have their own individual `Level`s.
 
-It should be quite obvious by now that this is simply a classic tree structure,
-with each node being able to grow dynamically, through a `vector`.
-
 ## Note
-This data structure was mainly created to help me learn a bit more about Rust.   
-It serves no purpose other really.  In theory, a data structure like this
-*should* use less memory, as it attempts to use previously inserted letters from
-the beginning of other words, but the implementation here may not be good enough
-to not outweigh the advantages the theoretical model offers.  This implementation
-may use **more** memory and have a fairly poor runtime execution; I haven't
-analyzed it enough to entirely know.
+I implemented this data structure to help me learn a bit more about Rust. In
+theory, a trie (prefix tree) *should* use less memory than some of the other
+more conventional storage structures, as it attempts to use previously inserted
+letters from the beginning of other words, but this specific implementation may
+not be good enough to not outweigh the advantages the theoretical model offers.  
+This implementation may use **more** memory and have a fairly poor runtime
+execution; I haven't analyzed it enough to entirely know.

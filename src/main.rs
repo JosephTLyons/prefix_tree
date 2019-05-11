@@ -58,19 +58,19 @@ impl Level {
 }
 
 #[derive(Default)]
-struct Rrds {
+struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
     iter: Option<Rc<RefCell<Level>>>,
     word_count: u32,
 }
 
-impl Rrds {
+impl PrefixTree {
     pub fn new() -> Self {
         let first_level = Some(Rc::new(RefCell::new(Level {
             letter_vector: Vec::new(),
         })));
 
-        Rrds {
+        PrefixTree {
             head: first_level.clone(),
             iter: first_level.clone(),
             word_count: 0,
@@ -167,17 +167,17 @@ impl Rrds {
 }
 
 fn main() {
-    match File::open("word_files/words_alpha.txt") {
+    match File::open("word_files/bte_lyrics.txt") {
         Ok(words_file) => {
             let buff = BufReader::new(words_file);
-            let mut rrds: Rrds = Rrds::new();
+            let mut pt: PrefixTree = PrefixTree::new();
 
             for line in buff.lines() {
-                rrds.insert_word(&line.unwrap());
+                pt.insert_word(&line.unwrap());
             }
 
-            rrds.print_words();
-            println!("Words in rrds: {}", rrds.get_word_count());
+            pt.print_words();
+            println!("Words in prefix tree: {}", pt.get_word_count());
         }
 
         Err(e) => println!("File could not be opened: {}", e),

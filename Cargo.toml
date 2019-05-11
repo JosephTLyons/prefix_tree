@@ -1,5 +1,5 @@
 [package]
-name = "rrds"
+name = "prefix_tree"
 version = "0.1.0"
 authors = ["Joseph Lyons <josephtlyons@gmail.com>"]
 edition = "2018"
