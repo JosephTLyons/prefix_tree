@@ -146,7 +146,7 @@ impl PrefixTree {
     fn print_words_recursively(&mut self,
                                 mut iter: &mut Option<Rc<RefCell<Level>>>,
                                 mut word: String,) {
-        match &mut iter {
+        match iter {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
                     word.push(x.letter);
@@ -246,7 +246,7 @@ mod tests {
     }
 
     #[test]
-    // A continuation on from contains_word_test_2()
+    // A continuation on from contains_word_test_2().
     fn contains_word_test_3() {
         let mut pt: PrefixTree = PrefixTree::new();
         pt.insert_word("doggy");
