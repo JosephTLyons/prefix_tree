@@ -224,86 +224,24 @@ mod tests {
     use super::*;
 
     #[test]
-    fn small_insert_test() {
-        let mut main_level: Level = Level {
-            letter_vector: Vec::new(),
-        };
+    // A typical test for the contains_word() function
+    fn contains_word_test_1() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("cat");
+        pt.insert_word("dog");
+        pt.insert_word("fish");
+        pt.insert_word("mouse");
 
-        main_level.binary_insert('i');
-        main_level.binary_insert('x');
-        main_level.binary_insert('u');
-
-        assert_eq!(
-            true,
-            main_level.letter_vector[0].letter == 'i'
-                && main_level.letter_vector[1].letter == 'u'
-                && main_level.letter_vector[2].letter == 'x'
-        );
+        assert_eq!(true, pt.contains_word("dog"));
     }
 
     #[test]
-    fn big_insert_test() {
-        let mut main_level: Level = Level {
-            letter_vector: Vec::new(),
-        };
+    // This test shows that even though "dog" is a prefix of "doggy", the data structure knows it
+    // isn't a valid word, since it was never inserted.
+    fn contains_word_test_2() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("doggy");
 
-        main_level.binary_insert('i');
-        main_level.binary_insert('x');
-        main_level.binary_insert('u');
-        main_level.binary_insert('m');
-        main_level.binary_insert('c');
-        main_level.binary_insert('h');
-        main_level.binary_insert('p');
-        main_level.binary_insert('z');
-        main_level.binary_insert('d');
-        main_level.binary_insert('y');
-        main_level.binary_insert('b');
-        main_level.binary_insert('w');
-        main_level.binary_insert('j');
-        main_level.binary_insert('e');
-        main_level.binary_insert('s');
-        main_level.binary_insert('q');
-        main_level.binary_insert('n');
-        main_level.binary_insert('f');
-        main_level.binary_insert('k');
-        main_level.binary_insert('v');
-        main_level.binary_insert('a');
-        main_level.binary_insert('l');
-        main_level.binary_insert('o');
-        main_level.binary_insert('g');
-        main_level.binary_insert('t');
-
-        let mut in_order: bool = true;
-
-        for x in 1..main_level.letter_vector.len() {
-            in_order = in_order
-                && (main_level.letter_vector[x - 1].letter < main_level.letter_vector[x].letter);
-        }
-
-        assert_eq!(true, in_order);
-    }
-
-    #[test]
-    fn insert_same_test() {
-        let mut main_level: Level = Level {
-            letter_vector: Vec::new(),
-        };
-
-        main_level.binary_insert('a');
-        main_level.binary_insert('a');
-
-        assert_eq!(true, main_level.letter_vector.len() == 1);
-    }
-
-    #[test]
-    fn insert_differet_test() {
-        let mut main_level: Level = Level {
-            letter_vector: Vec::new(),
-        };
-
-        main_level.binary_insert('a');
-        main_level.binary_insert('b');
-
-        assert_eq!(true, main_level.letter_vector.len() == 2);
+        assert_eq!(false, pt.contains_word("dog"));
     }
 }
