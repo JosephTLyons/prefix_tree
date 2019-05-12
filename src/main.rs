@@ -116,6 +116,34 @@ impl PrefixTree {
         self.print_words_recursively(&mut self.head.clone(), String::new());
     }
 
+    pub fn print_all_words_with_prefix(&mut self, prefix: &str) {
+        let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
+        let mut position: usize;
+        let position_of_last_letter: usize = prefix.char_indices().count() - 1;
+
+        for (index, character) in prefix.chars().enumerate() {
+            match iter {
+                Some(y) => {
+                    position = y.borrow_mut().binary_insert(character);
+                    iter = y.borrow().letter_vector[position].level_below.clone();
+
+                    if index == position_of_last_letter && y.borrow_mut().letter_vector[position].is_end_of_word {
+                        println!("{}", prefix);
+                    }
+                }
+
+                None => {
+                    println!("Prefix is invalid");
+                    return
+                }
+            }
+        }
+
+
+
+        self.print_words_recursively(&mut iter, prefix.to_string());
+    }
+
     fn print_words_recursively(&mut self,
                                 mut iter: &mut Option<Rc<RefCell<Level>>>,
                                 mut word: String,) {
