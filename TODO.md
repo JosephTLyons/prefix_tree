@@ -6,8 +6,6 @@
 - Have code reviewed and clean up all the non-idiomatic things in here
 - Divide code into modules
 - Include free-to-use txt files
-- Add method to print all strings with a given prefix (just move down to that  
-  level, then fall the recursive print on it)
 - Remove mut from print input and anywhere else?
 - Add a file print output method
 
