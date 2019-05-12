@@ -165,6 +165,37 @@ impl PrefixTree {
         }
     }
 
+    pub fn contains_word(&mut self, word: &str) -> bool {
+        let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
+        let mut position: usize;
+        let position_of_last_letter: usize = word.char_indices().count() - 1;
+
+        for (index, character) in word.chars().enumerate() {
+            match iter {
+                Some(y) => {
+                    position = y.borrow_mut().binary_insert(character);
+
+                    if y.borrow().letter_vector[position].letter != character {
+                        return false;
+                    }
+
+                    if index == position_of_last_letter
+                        && y.borrow_mut().letter_vector[position].is_end_of_word {
+                        return true;
+                    }
+
+                    iter = y.borrow().letter_vector[position].level_below.clone();
+                }
+
+                None => {
+                    println!("Iter isn't pointing to a valid level.");
+                }
+            }
+        }
+
+        false
+    }
+
     pub fn get_word_count(&self) -> u32 {
         self.word_count
     }
