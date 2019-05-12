@@ -53,8 +53,6 @@ impl PrefixTree {
     }
 
     pub fn insert_word(&mut self, word: &str) {
-        self.word_count += 1;
-
         let mut position: usize;
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
         let position_of_last_letter: usize = word.char_indices().count() - 1;
@@ -77,7 +75,10 @@ impl PrefixTree {
 
                     // Mark the end of the word, then we are finished, no more levels are needed
                     if index == position_of_last_letter {
-                        y.borrow_mut().letter_vector[position].end_of_word = true;
+                        if ! y.borrow_mut().letter_vector[position].end_of_word {
+                            y.borrow_mut().letter_vector[position].end_of_word = true;
+                            self.word_count += 1;
+                        }
                     }
 
                     else {
