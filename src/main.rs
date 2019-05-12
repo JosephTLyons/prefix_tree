@@ -113,7 +113,7 @@ impl PrefixTree {
     }
 
     pub fn print_all_words(&mut self) {
-        self.print_words_recursively(&mut self.head.clone(), String::new());
+        self.print_words_recursively(&mut self.head.clone(), &mut String::new());
     }
 
     pub fn print_all_words_with_prefix(&mut self, prefix: &str) {
@@ -140,12 +140,12 @@ impl PrefixTree {
             }
         }
 
-        self.print_words_recursively(&mut iter, prefix.to_string());
+        self.print_words_recursively(&mut iter, &mut prefix.to_string());
     }
 
     fn print_words_recursively(&mut self,
-                                mut iter: &mut Option<Rc<RefCell<Level>>>,
-                                mut word: String,) {
+                                iter: &mut Option<Rc<RefCell<Level>>>,
+                                word: &mut String,) {
         match iter {
             Some(y) => {
                 for x in &mut y.borrow_mut().letter_vector {
@@ -155,7 +155,7 @@ impl PrefixTree {
                         println!("{}", word);
                     }
 
-                    self.print_words_recursively(&mut x.level_below, word.clone());
+                    self.print_words_recursively(&mut x.level_below, word);
 
                     word.pop();
                 }
