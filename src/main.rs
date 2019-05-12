@@ -134,7 +134,7 @@ impl PrefixTree {
                 }
 
                 None => {
-                    println!("Prefix is invalid");
+                    println!("Iter isn't pointing to a valid level.");
                     return;
                 }
             }
