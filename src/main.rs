@@ -244,4 +244,14 @@ mod tests {
 
         assert_eq!(false, pt.contains_word("dog"));
     }
+
+    #[test]
+    // A continuation on from contains_word_test_2()
+    fn contains_word_test_3() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("doggy");
+        pt.insert_word("dog");
+
+        assert_eq!(true, pt.contains_word("dog"));
+    }
 }
