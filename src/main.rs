@@ -57,17 +57,17 @@ impl PrefixTree {
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
         let position_of_last_letter: usize = word.char_indices().count() - 1;
 
-        for (index, item) in word.chars().enumerate() {
-            match &iter.clone() {
+        for (index, character) in word.chars().enumerate() {
+            match iter.clone() {
                 Some(y) => {
                     // Insert Letter and get its position
-                    position = y.borrow_mut().binary_insert(item);
+                    position = y.borrow_mut().binary_insert(character);
 
                     // Debug code
                     // println! (
                     //     "Level: {} | Char: {} | Vector len: {}",
                     //     index + 1,
-                    //     item,
+                    //     character,
                     //     y.borrow().letter_vector.len()
                     // );
 
@@ -87,7 +87,7 @@ impl PrefixTree {
                                 // Debug code
                                 // println! (
                                 //     "There exists a level below (Char: {} | Level: {})",
-                                //     item,
+                                //     character,
                                 //     index + 1)
                             }
 
