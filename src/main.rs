@@ -6,7 +6,7 @@ use std::rc::Rc;
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
 struct Letter {
     letter: char,
-    end_of_word: bool,
+    is_end_of_word: bool,
     level_below: Option<Rc<RefCell<Level>>>,
 }
 
@@ -21,7 +21,7 @@ impl Level {
     fn binary_insert(&mut self, plain_letter: char) -> usize {
         let letter: Letter = Letter {
             letter: plain_letter,
-            end_of_word: false,
+            is_end_of_word: false,
             level_below: None,
         };
 
@@ -75,8 +75,8 @@ impl PrefixTree {
 
                     // Mark the end of the word, then we are finished, no more levels are needed
                     if index == position_of_last_letter {
-                        if ! y.borrow_mut().letter_vector[position].end_of_word {
-                            y.borrow_mut().letter_vector[position].end_of_word = true;
+                        if ! y.borrow_mut().letter_vector[position].is_end_of_word {
+                            y.borrow_mut().letter_vector[position].is_end_of_word = true;
                             self.word_count += 1;
                         }
                     }
@@ -124,7 +124,7 @@ impl PrefixTree {
                 for x in &mut y.borrow_mut().letter_vector {
                     word.push(x.letter);
 
-                    if x.end_of_word {
+                    if x.is_end_of_word {
                         println!("{}", word);
                     }
 
