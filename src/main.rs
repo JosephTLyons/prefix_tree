@@ -112,7 +112,7 @@ impl PrefixTree {
         }
     }
 
-    pub fn print_words(&mut self) {
+    pub fn print_all_words(&mut self) {
         self.print_words_recursively(&mut self.head.clone(), String::new());
     }
 
@@ -153,7 +153,7 @@ fn main() {
                 pt.insert_word(&line.unwrap());
             }
 
-            pt.print_words();
+            pt.print_all_words();
             println!("Words in prefix tree: {}", pt.get_word_count());
         }
 
