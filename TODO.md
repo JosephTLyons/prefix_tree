@@ -16,4 +16,3 @@
 - Cloning too much... alternatives?
 - Add some sort of counter for each letter inserted, so we can see how many
   letters are saved after inserting some words.
-- Give credit to Moxian and Nick
