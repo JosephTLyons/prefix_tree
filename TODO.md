@@ -4,7 +4,7 @@
 - Run format
 - Remove print debug statements
 - Have code reviewed and clean up all the non-idiomatic things in here
-- Divide code into modules
+- Move tests into their own file?
 - Include free-to-use txt files
 - Remove mut from print input and anywhere else?
 - Are the muts for before variable name / data type correct?  I dont really know
