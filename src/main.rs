@@ -7,7 +7,7 @@ use std::io::{BufRead, BufReader};
 fn main() {
     let mut actual_letter_count: usize = 0;
 
-    match File::open("word_files/20k.txt") {
+    match File::open("../word_files/my_words.txt") {
         Ok(words_file) => {
             let buff = BufReader::new(words_file);
             let mut pt: PrefixTree = PrefixTree::new();
