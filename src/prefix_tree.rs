@@ -159,9 +159,7 @@ impl PrefixTree {
                             iter = y.borrow().letter_vector[position].level_below.clone();
                         }
 
-                        Err(_) => {
-                            return false;
-                        }
+                        Err(_) => return false
                     }
                 }
 
