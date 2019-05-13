@@ -1,16 +1,14 @@
-mod letter;
-
-use letter::Letter;
+use super::letter::Letter;
 
 // A vector of Letters
 pub struct Level {
-    letter_vector: Vec<Letter>,
+    pub letter_vector: Vec<Letter>,
 }
 
 impl Level {
     // Either inserts the item if it doesn't exist and returns its location or simply returns the
     // location if it does exist.
-    fn binary_insert(&mut self, plain_letter: char) -> (usize, bool) {
+    pub fn binary_insert(&mut self, plain_letter: char) -> (usize, bool) {
         let letter: Letter = Letter {
             letter: plain_letter,
             is_end_of_word: false,

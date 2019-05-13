@@ -1,3 +1,4 @@
+mod letter;
 mod level;
 
 use level::Level;
