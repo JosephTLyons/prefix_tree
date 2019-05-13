@@ -211,29 +211,21 @@ impl PrefixTree {
 }
 
 fn main() {
-    // match File::open("word_files/words_alpha.txt") {
-    //     Ok(words_file) => {
-    //         let buff = BufReader::new(words_file);
-    //         let mut pt: PrefixTree = PrefixTree::new();
-    //
-    //         for line in buff.lines() {
-    //             pt.insert_word(&line.unwrap());
-    //         }
-    //
-    //         pt.print_all_words();
-    //         println!("Words in prefix tree: {}", pt.get_word_count());
-    //     }
-    //
-    //     Err(e) => println!("File could not be opened: {}", e),
-    // }
+    match File::open("word_files/words_alpha.txt") {
+        Ok(words_file) => {
+            let buff = BufReader::new(words_file);
+            let mut pt: PrefixTree = PrefixTree::new();
 
-    let mut pt: PrefixTree = PrefixTree::new();
+            for line in buff.lines() {
+                pt.insert_word(&line.unwrap());
+            }
 
-    pt.insert_word("doggy");
-    println!("{}", pt.contains_word("dog"));
-    pt.insert_word("dog");
-    println!("{}", pt.contains_word("dog"));
-    pt.print_all_words();
+            pt.print_all_words();
+            println!("Words in prefix tree: {}", pt.get_word_count());
+        }
+
+        Err(e) => println!("File could not be opened: {}", e),
+    }
 }
 
 #[cfg(test)]
