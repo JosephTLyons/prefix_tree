@@ -49,7 +49,7 @@ impl PrefixTree {
 
                     else {
                         match y.borrow().letter_vector[insert_result.0].level_below {
-                            Some(_) => {},
+                            Some(_) => {}
 
                             // Create a new Level below
                             None => should_make_new_level = true,
@@ -63,7 +63,9 @@ impl PrefixTree {
                         }
 
                         // Move down to a level
-                        iter = y.borrow().letter_vector[insert_result.0].level_below.clone();
+                        iter = y.borrow().letter_vector[insert_result.0]
+                            .level_below
+                            .clone();
                     }
                 }
 
