@@ -1,9 +1,6 @@
-mod letter;
 mod level;
 
-use letter::Letter;
 use level::Level;
-
 use std::cell::RefCell;
 use std::rc::Rc;
 
