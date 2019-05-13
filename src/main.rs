@@ -76,7 +76,7 @@ impl PrefixTree {
 
                     // Mark the end of the word, then we are finished, no more levels are needed
                     if index == position_of_last_letter {
-                        if ! y.borrow_mut().letter_vector[insert_result.0].is_end_of_word {
+                        if ! y.borrow().letter_vector[insert_result.0].is_end_of_word {
                             y.borrow_mut().letter_vector[insert_result.0].is_end_of_word = true;
                             self.word_count += 1;
                         }
@@ -127,7 +127,7 @@ impl PrefixTree {
                             iter = y.borrow().letter_vector[position].level_below.clone();
 
                             if index == position_of_last_letter
-                                && y.borrow_mut().letter_vector[position].is_end_of_word {
+                                && y.borrow().letter_vector[position].is_end_of_word {
                                 println!("{}", prefix);
                             }
                         }
