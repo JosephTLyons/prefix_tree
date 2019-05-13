@@ -18,7 +18,7 @@ pub struct Level {
 impl Level {
     // Either inserts the item if it doesn't exist and returns its location or simply returns the
     // location if it does exist.
-    fn binary_insert(&mut self, plain_letter: char) -> usize {
+    fn binary_insert(&mut self, plain_letter: char) -> (usize, bool) {
         let letter: Letter = Letter {
             letter: plain_letter,
             is_end_of_word: false,
@@ -30,10 +30,10 @@ impl Level {
             .letter_vector
             .binary_search_by_key(&plain_letter, |letter| letter.letter)
         {
-            Ok(position) => position,
+            Ok(position) => (position, false),
             Err(position) => {
                 self.letter_vector.insert(position, letter);
-                position
+                (position, true)
             }
         }
     }
@@ -43,6 +43,7 @@ impl Level {
 struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
     word_count: u32,
+    letter_count: u64,
 }
 
 impl PrefixTree {
@@ -52,11 +53,12 @@ impl PrefixTree {
                 letter_vector: Vec::new(),
             }))),
             word_count: 0,
+            letter_count: 0,
         }
     }
 
     pub fn insert_word(&mut self, word: &str) {
-        let mut position: usize;
+        let mut insert_result: (usize, bool);
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
         let position_of_last_letter: usize = word.char_indices().count() - 1;
 
@@ -64,49 +66,39 @@ impl PrefixTree {
             match iter.clone() {
                 Some(y) => {
                     // Insert Letter and get its position
-                    position = y.borrow_mut().binary_insert(character);
+                    insert_result = y.borrow_mut().binary_insert(character);
 
-                    // Debug code
-                    // println! (
-                    //     "Level: {} | Char: {} | Vector len: {}",
-                    //     index + 1,
-                    //     character,
-                    //     y.borrow().letter_vector.len()
-                    // );
+                    if insert_result.1 {
+                        self.letter_count += 1;
+                    }
 
                     let mut should_make_new_level: bool = false;
 
                     // Mark the end of the word, then we are finished, no more levels are needed
                     if index == position_of_last_letter {
-                        if ! y.borrow_mut().letter_vector[position].is_end_of_word {
-                            y.borrow_mut().letter_vector[position].is_end_of_word = true;
+                        if ! y.borrow_mut().letter_vector[insert_result.0].is_end_of_word {
+                            y.borrow_mut().letter_vector[insert_result.0].is_end_of_word = true;
                             self.word_count += 1;
                         }
                     }
 
                     else {
-                        match y.borrow().letter_vector[position].level_below {
-                            Some(_) => {
-                                // Debug code
-                                // println! (
-                                //     "There exists a level below (Char: {} | Level: {})",
-                                //     character,
-                                //     index + 1)
-                            }
+                        match y.borrow().letter_vector[insert_result.0].level_below {
+                            Some(_) => {},
 
                             // Create a new Level below
                             None => should_make_new_level = true,
                         }
 
                         if should_make_new_level {
-                            y.borrow_mut().letter_vector[position].level_below =
+                            y.borrow_mut().letter_vector[insert_result.0].level_below =
                                 Some(Rc::new(RefCell::new(Level {
                                     letter_vector: Vec::new(),
                                 })));
                         }
 
                         // Move down to a level
-                        iter = y.borrow().letter_vector[position].level_below.clone();
+                        iter = y.borrow().letter_vector[insert_result.0].level_below.clone();
                     }
                 }
 
@@ -218,6 +210,10 @@ impl PrefixTree {
     pub fn get_word_count(&self) -> u32 {
         self.word_count
     }
+
+    pub fn get_letter_count(&self) -> u64 {
+        self.letter_count
+    }
 }
 
 fn main() {
@@ -304,5 +300,27 @@ mod tests {
         pt.insert_word("a");
 
         assert_eq!(true, pt.get_word_count() == 4);
+    }
+
+    #[test]
+    // A simple get_letter_count() test
+    fn get_letter_count_test_1() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("a");
+
+        assert_eq!(true, pt.get_letter_count() == 1);
+    }
+
+    #[test]
+    // A more interesting get_letter_count() test
+    fn get_letter_count_test_2() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("a");
+        pt.insert_word("an");
+        pt.insert_word("am");
+        pt.insert_word("are");
+        pt.insert_word("as");
+
+        assert_eq!(true, pt.get_letter_count() == 6);
     }
 }
