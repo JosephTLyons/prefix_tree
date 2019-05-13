@@ -1,2 +1,5 @@
 /target
 **/*.rs.bk
+
+20k_sorted.txt
+words_alpha.txt
