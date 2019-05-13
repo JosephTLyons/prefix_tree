@@ -37,7 +37,6 @@ impl Level {
     }
 }
 
-#[derive(Default)]
 pub struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
     word_count: u32,
