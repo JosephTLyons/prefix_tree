@@ -1,8 +1,8 @@
 mod level;
 
+use level::Level;
 use std::cell::RefCell;
 use std::rc::Rc;
-use level::Level;
 
 // Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
 pub struct Letter {
