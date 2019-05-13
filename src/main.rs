@@ -273,4 +273,36 @@ mod tests {
 
         assert_eq!(true, pt.contains_word("dog"));
     }
+
+    #[test]
+    // A simle test of get_word_count()
+    fn get_word_count_test_1() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("a");
+
+        assert_eq!(true, pt.get_word_count() == 1);
+    }
+
+    #[test]
+    // A simple test that ensures duplicate words aren't counted twice
+    fn get_word_count_test_2() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("a");
+        pt.insert_word("a");
+
+        assert_eq!(true, pt.get_word_count() == 1);
+    }
+
+    #[test]
+    // A more interesting test that ensures duplicate words aren't counted twice
+    fn get_word_count_test_3() {
+        let mut pt: PrefixTree = PrefixTree::new();
+        pt.insert_word("a");
+        pt.insert_word("an");
+        pt.insert_word("am");
+        pt.insert_word("are");
+        pt.insert_word("a");
+
+        assert_eq!(true, pt.get_word_count() == 4);
+    }
 }
