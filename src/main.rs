@@ -19,9 +19,9 @@ fn main() {
             }
 
             pt.print_all_words();
-            // println!("Letters in file: {}", actual_letter_count);
-            // println!("Letters in tree: {}", pt.get_letter_count());
-            // println!("Words in tree:   {}", pt.get_word_count());
+            println!("Letters in file: {}", actual_letter_count);
+            println!("Letters in tree: {}", pt.get_letter_count());
+            println!("Words in tree:   {}", pt.get_word_count());
         }
 
         Err(e) => println!("File could not be opened: {}", e),
