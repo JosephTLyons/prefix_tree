@@ -14,5 +14,5 @@
 - Try not to explicitly match on Option and Result types, try to use the methods
   that are provided
 - Cloning too much... alternatives?
-- Add some sort of counter for each letter inserted, so we can see how many
-  letters are saved after inserting some words.
+- Add a test to read in many alphabetized words from a file, 5,000 or so, then,
+  print them out.  Then compare each file
