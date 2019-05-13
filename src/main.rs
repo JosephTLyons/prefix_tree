@@ -118,18 +118,25 @@ impl PrefixTree {
 
     pub fn print_all_words_with_prefix(&mut self, prefix: &str) {
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
-        let mut position: usize;
         let position_of_last_letter: usize = prefix.char_indices().count() - 1;
 
         for (index, character) in prefix.chars().enumerate() {
             match iter {
                 Some(y) => {
-                    position = y.borrow_mut().binary_insert(character);
-                    iter = y.borrow().letter_vector[position].level_below.clone();
+                    match y.borrow().letter_vector.binary_search_by_key(&character, |letter| letter.letter) {
+                        Ok(position) => {
+                            iter = y.borrow().letter_vector[position].level_below.clone();
 
-                    if index == position_of_last_letter
-                        && y.borrow_mut().letter_vector[position].is_end_of_word {
-                        println!("{}", prefix);
+                            if index == position_of_last_letter
+                                && y.borrow_mut().letter_vector[position].is_end_of_word {
+                                println!("{}", prefix);
+                            }
+                        },
+
+                        Err(_) => {
+                            println!("Prefix is invalid");
+                            return;
+                        },
                     }
                 }
 
@@ -167,24 +174,26 @@ impl PrefixTree {
 
     pub fn contains_word(&mut self, word: &str) -> bool {
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
-        let mut position: usize;
         let position_of_last_letter: usize = word.char_indices().count() - 1;
 
         for (index, character) in word.chars().enumerate() {
             match iter {
                 Some(y) => {
-                    position = y.borrow_mut().binary_insert(character);
+                    match y.borrow().letter_vector.binary_search_by_key(&character, |letter| letter.letter) {
+                        Ok(position) => {
+                            if index == position_of_last_letter
+                                && y.borrow().letter_vector[position].is_end_of_word {
+                                return true;
+                            }
 
-                    if y.borrow().letter_vector[position].letter != character {
-                        return false;
+                            iter = y.borrow().letter_vector[position].level_below.clone();
+                        },
+
+                        Err(_) => {
+                            println!("Word doesn't exist");
+                            return false
+                        }
                     }
-
-                    if index == position_of_last_letter
-                        && y.borrow_mut().letter_vector[position].is_end_of_word {
-                        return true;
-                    }
-
-                    iter = y.borrow().letter_vector[position].level_below.clone();
                 }
 
                 None => {
@@ -202,21 +211,29 @@ impl PrefixTree {
 }
 
 fn main() {
-    match File::open("word_files/bte_lyrics.txt") {
-        Ok(words_file) => {
-            let buff = BufReader::new(words_file);
-            let mut pt: PrefixTree = PrefixTree::new();
+    // match File::open("word_files/words_alpha.txt") {
+    //     Ok(words_file) => {
+    //         let buff = BufReader::new(words_file);
+    //         let mut pt: PrefixTree = PrefixTree::new();
+    //
+    //         for line in buff.lines() {
+    //             pt.insert_word(&line.unwrap());
+    //         }
+    //
+    //         pt.print_all_words();
+    //         println!("Words in prefix tree: {}", pt.get_word_count());
+    //     }
+    //
+    //     Err(e) => println!("File could not be opened: {}", e),
+    // }
 
-            for line in buff.lines() {
-                pt.insert_word(&line.unwrap());
-            }
+    let mut pt: PrefixTree = PrefixTree::new();
 
-            pt.print_all_words();
-            println!("Words in prefix tree: {}", pt.get_word_count());
-        }
-
-        Err(e) => println!("File could not be opened: {}", e),
-    }
+    pt.insert_word("doggy");
+    println!("{}", pt.contains_word("dog"));
+    pt.insert_word("dog");
+    println!("{}", pt.contains_word("dog"));
+    pt.print_all_words();
 }
 
 #[cfg(test)]
