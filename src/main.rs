@@ -1,6 +1,6 @@
 mod prefix_tree;
-use prefix_tree::PrefixTree;
 
+use prefix_tree::PrefixTree;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
