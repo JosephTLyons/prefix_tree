@@ -26,7 +26,10 @@ impl Level {
         };
 
         // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
-        match self.letter_vector.binary_search_by_key(&plain_letter, |letter| letter.letter) {
+        match self
+            .letter_vector
+            .binary_search_by_key(&plain_letter, |letter| letter.letter)
+        {
             Ok(position) => position,
             Err(position) => {
                 self.letter_vector.insert(position, letter);
@@ -123,7 +126,11 @@ impl PrefixTree {
         for (index, character) in prefix.chars().enumerate() {
             match iter {
                 Some(y) => {
-                    match y.borrow().letter_vector.binary_search_by_key(&character, |letter| letter.letter) {
+                    match y
+                        .borrow()
+                        .letter_vector
+                        .binary_search_by_key(&character, |letter| letter.letter)
+                    {
                         Ok(position) => {
                             iter = y.borrow().letter_vector[position].level_below.clone();
 
@@ -131,12 +138,12 @@ impl PrefixTree {
                                 && y.borrow_mut().letter_vector[position].is_end_of_word {
                                 println!("{}", prefix);
                             }
-                        },
+                        }
 
                         Err(_) => {
                             println!("Prefix is invalid");
                             return;
-                        },
+                        }
                     }
                 }
 
@@ -179,7 +186,11 @@ impl PrefixTree {
         for (index, character) in word.chars().enumerate() {
             match iter {
                 Some(y) => {
-                    match y.borrow().letter_vector.binary_search_by_key(&character, |letter| letter.letter) {
+                    match y
+                        .borrow()
+                        .letter_vector
+                        .binary_search_by_key(&character, |letter| letter.letter)
+                    {
                         Ok(position) => {
                             if index == position_of_last_letter
                                 && y.borrow().letter_vector[position].is_end_of_word {
@@ -187,11 +198,11 @@ impl PrefixTree {
                             }
 
                             iter = y.borrow().letter_vector[position].level_below.clone();
-                        },
+                        }
 
                         Err(_) => {
                             println!("Word doesn't exist");
-                            return false
+                            return false;
                         }
                     }
                 }
