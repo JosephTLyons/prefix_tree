@@ -10,6 +10,7 @@
 - Are the muts for before variable name / data type correct?  I dont really know
   the difference here.
 - Add a file print output method
+    - Can use redirection for the time being
 - Try to use box over Rc (Moxian)
 - Try not to explicitly match on Option and Result types, try to use the methods
   that are provided
