@@ -1,41 +1,11 @@
+mod letter;
+mod level;
+
+use letter::Letter;
+use level::Level;
+
 use std::cell::RefCell;
 use std::rc::Rc;
-
-// Holds a normal char and a pointer to a Level, which is simply a vector of Letters.
-struct Letter {
-    letter: char,
-    is_end_of_word: bool,
-    level_below: Option<Rc<RefCell<Level>>>,
-}
-
-// A vector of Letters
-struct Level {
-    letter_vector: Vec<Letter>,
-}
-
-impl Level {
-    // Either inserts the item if it doesn't exist and returns its location or simply returns the
-    // location if it does exist.
-    fn binary_insert(&mut self, plain_letter: char) -> (usize, bool) {
-        let letter: Letter = Letter {
-            letter: plain_letter,
-            is_end_of_word: false,
-            level_below: None,
-        };
-
-        // Modified from Lucas' solution: https://stackoverflow.com/a/36253479
-        match self
-            .letter_vector
-            .binary_search_by_key(&plain_letter, |letter| letter.letter)
-        {
-            Ok(position) => (position, false),
-            Err(position) => {
-                self.letter_vector.insert(position, letter);
-                (position, true)
-            }
-        }
-    }
-}
 
 pub struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
