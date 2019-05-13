@@ -201,7 +201,6 @@ impl PrefixTree {
                         }
 
                         Err(_) => {
-                            println!("Word doesn't exist");
                             return false;
                         }
                     }
