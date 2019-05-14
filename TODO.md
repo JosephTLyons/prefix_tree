@@ -1,8 +1,8 @@
 # TODO
 - Implement Display trait ?
+- Implement non-recursive print?
 - Clean up code heavily
-- Run format
-- Remove print debug statements
+- Run rustfmt
 - Have code reviewed and clean up all the non-idiomatic things in here
 - Include free-to-use txt files
 - Remove mut from print input and anywhere else?
