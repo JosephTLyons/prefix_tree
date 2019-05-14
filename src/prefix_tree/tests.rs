@@ -38,7 +38,7 @@ fn get_word_count_test_1() {
     let mut pt: PrefixTree = PrefixTree::new();
     pt.insert_word("a");
 
-    assert_eq!(true, pt.get_word_count() == 1);
+    assert_eq!(1, pt.get_word_count());
 }
 
 #[test]
@@ -48,7 +48,7 @@ fn get_word_count_test_2() {
     pt.insert_word("a");
     pt.insert_word("a");
 
-    assert_eq!(true, pt.get_word_count() == 1);
+    assert_eq!(1, pt.get_word_count());
 }
 
 #[test]
@@ -61,7 +61,7 @@ fn get_word_count_test_3() {
     pt.insert_word("are");
     pt.insert_word("a");
 
-    assert_eq!(true, pt.get_word_count() == 4);
+    assert_eq!(4, pt.get_word_count());
 }
 
 #[test]
@@ -70,7 +70,7 @@ fn get_letter_count_test_1() {
     let mut pt: PrefixTree = PrefixTree::new();
     pt.insert_word("a");
 
-    assert_eq!(true, pt.get_letter_count() == 1);
+    assert_eq!(1, pt.get_letter_count());
 }
 
 #[test]
@@ -83,5 +83,5 @@ fn get_letter_count_test_2() {
     pt.insert_word("are");
     pt.insert_word("as");
 
-    assert_eq!(true, pt.get_letter_count() == 6);
+    assert_eq!(6, pt.get_letter_count());
 }
