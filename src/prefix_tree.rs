@@ -165,6 +165,7 @@ impl PrefixTree {
 
                 None => {
                     println!("Iter isn't pointing to a valid level.");
+                    return false
                 }
             }
         }
