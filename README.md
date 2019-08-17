@@ -27,7 +27,7 @@ Level 2: t
 
 Each `Level` is a vector containing a `Letter`.  The `Letter` contains a boolean
 to mark the end of a word (which is used when `print_words()` is called), and a
-pointer to a new level.  In this specific example, the `end_of_word` boolean for
+pointer to a new `Level`.  In this specific example, the `end_of_word` boolean for
 'b' and 'a' are set to `false`, while the `end_of_word` boolean for 't' is set
 to `true`.
 
