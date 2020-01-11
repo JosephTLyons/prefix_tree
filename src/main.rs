@@ -3,12 +3,13 @@ mod prefix_tree;
 use prefix_tree::PrefixTree;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::path::Path;
 
 fn main() {
     let mut actual_letter_count: usize = 0;
 
-    let words_file =
-        File::open("../word_files/my_words.txt").expect("File could not be opened: {}");
+    let path_to_word_file = Path::new("word_files/my_words.txt");
+    let words_file = File::open(path_to_word_file).expect("File could not be opened.");
 
     let buff = BufReader::new(words_file);
     let mut pt: PrefixTree = PrefixTree::new();
