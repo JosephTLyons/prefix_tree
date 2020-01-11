@@ -77,6 +77,7 @@ impl PrefixTree {
         self.print_words_recursively(&mut self.head.clone(), &mut String::new());
     }
 
+    #[allow(dead_code)]
     pub fn print_all_words_with_prefix(&mut self, prefix: &str) {
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
         let position_of_last_letter: usize = prefix.char_indices().count() - 1;
@@ -136,10 +137,11 @@ impl PrefixTree {
                 }
             }
 
-            None => return,
+            None => {},
         }
     }
 
+    #[allow(dead_code)]
     pub fn contains_word(&mut self, word: &str) -> bool {
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
         let position_of_last_letter: usize = word.char_indices().count() - 1;
