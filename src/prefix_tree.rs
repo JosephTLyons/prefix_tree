@@ -41,7 +41,6 @@ impl PrefixTree {
         for (index, character) in word_in_preferred_case.chars().enumerate() {
             match iter.clone() {
                 Some(y) => {
-
                     // Insert Letter and get its position
                     insert_result = y.borrow_mut().binary_insert(character);
 
