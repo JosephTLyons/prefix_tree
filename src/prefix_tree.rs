@@ -1,6 +1,8 @@
+mod case;
 mod letter;
 mod level;
 
+pub use case::Case;
 use level::Level;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -9,27 +11,37 @@ pub struct PrefixTree {
     head: Option<Rc<RefCell<Level>>>,
     word_count: u32,
     letter_count: u64,
+    case: Case,
 }
 
 impl PrefixTree {
-    pub fn new() -> Self {
+    pub fn new(preferred_case: Case) -> Self {
         PrefixTree {
             head: Some(Rc::new(RefCell::new(Level {
                 letter_vector: Vec::new(),
             }))),
             word_count: 0,
             letter_count: 0,
+            case: preferred_case,
         }
     }
 
     pub fn insert_word(&mut self, word: &str) {
         let mut insert_result: (usize, bool);
         let mut iter: Option<Rc<RefCell<Level>>> = self.head.clone();
-        let position_of_last_letter: usize = word.char_indices().count() - 1;
 
-        for (index, character) in word.chars().enumerate() {
+        let word_in_preferred_case: String = match self.case {
+            Case::Insensitive => String::from(word),
+            Case::Uppercase => word.to_uppercase(),
+            Case::Lowercase => word.to_lowercase(),
+        };
+
+        let position_of_last_letter: usize = word_in_preferred_case.char_indices().count() - 1;
+
+        for (index, character) in word_in_preferred_case.chars().enumerate() {
             match iter.clone() {
                 Some(y) => {
+
                     // Insert Letter and get its position
                     insert_result = y.borrow_mut().binary_insert(character);
 
@@ -137,7 +149,7 @@ impl PrefixTree {
                 }
             }
 
-            None => {},
+            None => {}
         }
     }
 

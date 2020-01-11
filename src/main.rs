@@ -1,5 +1,6 @@
 mod prefix_tree;
 
+use prefix_tree::Case;
 use prefix_tree::PrefixTree;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -12,7 +13,7 @@ fn main() {
     let words_file = File::open(path_to_word_file).expect("File could not be opened.");
 
     let buff = BufReader::new(words_file);
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
 
     for line in buff.lines() {
         let result = line.unwrap();

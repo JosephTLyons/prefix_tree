@@ -1,9 +1,10 @@
 use super::super::prefix_tree::PrefixTree;
+use super::super::prefix_tree::Case;
 
 #[test]
 // A typical test for the contains_word() function
 fn contains_word_test_1() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("cat");
     pt.insert_word("dog");
     pt.insert_word("fish");
@@ -16,7 +17,7 @@ fn contains_word_test_1() {
 // This test shows that even though "dog" is a prefix of "doggy", the data structure knows it
 // isn't a valid word, since it was never inserted.
 fn contains_word_test_2() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("doggy");
 
     assert_eq!(false, pt.contains_word("dog"));
@@ -25,7 +26,7 @@ fn contains_word_test_2() {
 #[test]
 // A continuation on from contains_word_test_2().
 fn contains_word_test_3() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("doggy");
     pt.insert_word("dog");
 
@@ -35,7 +36,7 @@ fn contains_word_test_3() {
 #[test]
 // A simle test of get_word_count()
 fn get_word_count_test_1() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("a");
 
     assert_eq!(1, pt.get_word_count());
@@ -44,7 +45,7 @@ fn get_word_count_test_1() {
 #[test]
 // A simple test that ensures duplicate words aren't counted twice
 fn get_word_count_test_2() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("a");
     pt.insert_word("a");
 
@@ -54,7 +55,7 @@ fn get_word_count_test_2() {
 #[test]
 // A more interesting test that ensures duplicate words aren't counted twice
 fn get_word_count_test_3() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("a");
     pt.insert_word("an");
     pt.insert_word("am");
@@ -67,7 +68,7 @@ fn get_word_count_test_3() {
 #[test]
 // A simple get_letter_count() test
 fn get_letter_count_test_1() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("a");
 
     assert_eq!(1, pt.get_letter_count());
@@ -76,7 +77,7 @@ fn get_letter_count_test_1() {
 #[test]
 // A more interesting get_letter_count() test
 fn get_letter_count_test_2() {
-    let mut pt: PrefixTree = PrefixTree::new();
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     pt.insert_word("a");
     pt.insert_word("an");
     pt.insert_word("am");
@@ -84,4 +85,31 @@ fn get_letter_count_test_2() {
     pt.insert_word("as");
 
     assert_eq!(6, pt.get_letter_count());
+}
+
+#[test]
+fn case_insensitive_test() {
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
+    let text = "CaSe InSeNsItIvE";
+
+    pt.insert_word(text);
+    assert_eq!(true, pt.contains_word(text));
+}
+
+#[test]
+fn uppercase_test() {
+    let mut pt: PrefixTree = PrefixTree::new(Case::Uppercase);
+    let text = "should be uppercase";
+
+    pt.insert_word(text);
+    assert_eq!(true, pt.contains_word(text.to_uppercase().as_str()));
+}
+
+#[test]
+fn lowercase_test() {
+    let mut pt: PrefixTree = PrefixTree::new(Case::Lowercase);
+    let text = "SHOULD BE LOWERCASE";
+
+    pt.insert_word(text);
+    assert_eq!(true, pt.contains_word(text.to_lowercase().as_str()));
 }
