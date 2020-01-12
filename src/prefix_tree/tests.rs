@@ -88,6 +88,22 @@ fn get_letter_count_test_2() {
 }
 
 #[test]
+fn test_symbol_insert() {
+    let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
+    let text: String = String::from("$#**   ... {} /<>");
+
+    pt.insert_word(text.as_str());
+
+    assert_eq!(true, pt.contains_word(text.as_str()));
+
+    let new_text: String = text + " ^$@";
+    assert_eq!(false, pt.contains_word(new_text.as_str()));
+
+    pt.insert_word((new_text).as_str());
+    assert_eq!(true, pt.contains_word(new_text.as_str()));
+}
+
+#[test]
 fn case_insensitive_test() {
     let mut pt: PrefixTree = PrefixTree::new(Case::Insensitive);
     let text = "CaSe InSeNsItIvE";
