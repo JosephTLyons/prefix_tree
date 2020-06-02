@@ -56,8 +56,7 @@ impl PrefixTree {
                             y.borrow_mut().letter_vector[insert_result.0].is_end_of_word = true;
                             self.word_count += 1;
                         }
-                    }
-                    else {
+                    } else {
                         match y.borrow().letter_vector[insert_result.0].level_below {
                             Some(_) => {}
 

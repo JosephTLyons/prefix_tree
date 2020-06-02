@@ -1,5 +1,4 @@
-use super::super::prefix_tree::PrefixTree;
-use super::super::prefix_tree::Case;
+use super::super::prefix_tree::{Case, PrefixTree};
 
 #[test]
 // A typical test for the contains_word() function
