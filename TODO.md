@@ -16,3 +16,4 @@
 - Cloning too much... alternatives?
 - Add a test to read in many alphabetized words from a file, 5,000 or so, then,
   print them out.  Then compare each file
+- Try to switch to generics over char, if possible.
